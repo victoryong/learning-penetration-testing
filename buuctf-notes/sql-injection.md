@@ -2,6 +2,9 @@
 
 ## [极客大挑战 2019]EasySQL
 
+
+![EasySQL](./images/easysql.png)
+
 最简单的一个SQL注入题。由于web后台直接将表单提交数据拼接到SQL语句上，因此可以通过将非法SQL内容提交到后台作为SQL语句的一部分进行注入。注入的几个要素是：
 
 1. 终结SQL的前半部分；
@@ -18,3 +21,27 @@ You have an error in your SQL syntax; check the manual that corresponds to your 
 ```
 
 这个注释符需要注意的是，需要有一个空格，但是输入的时候如果加了空格也会失效，因为对字符串做了去除头尾空白符的操作（trim），同样也会导致SQL报错。可以通过加一个任意非空格字符解决：`' or 1 = 1 -- d`。
+
+
+## [极客大挑战 2019]Havefun 1
+
+![Havefun](./images/havefun.png)
+
+进入后只有这只猫，一眼看不出问题所在。查看源代码，其中页面的HTML代码为：
+
+```html
+                <!--
+        $cat=$_GET['cat'];
+        echo $cat;
+        if($cat=='dog'){
+            echo 'Syc{cat_cat_cat_cat}';
+        }
+        -->
+      <div style="position: absolute;bottom: 0;width: 99%;"><p align="center" style="font:italic 15px Georgia,serif;color:black;"> Syclover @ cl4y</p></div>
+      </body>
+</html>
+```
+
+其中有一段注释了的PHP代码，可知有个GET请求接口，解析请求参数cat，若参数值为dog则打印出flag，因此只需要在URL中加上一个参数`?cat=dog`即可。
+
+**有个问题：这个注释的PHP是为了做题的时候提供入手点，还是说现实会有这样的情况存在？**
