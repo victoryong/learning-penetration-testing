@@ -24,7 +24,7 @@
 
 其中注释有个source.php，访问看到source.php的源代码和滑稽脸：
 
-```html
+```php
 <?php
     highlight_file(__FILE__);
     class emmm
@@ -80,7 +80,9 @@
 
 接着截取参数中第一个`?`前面的部分，如果命中白名单则返回TRUE，所以payload必须是以`source.php?`或`hint.php?`开头的字符串才能通过检查。
 
-如果checkFile返回TRUE，则这个file参数会被include进来，必然是通过这个include来把flag文件包括进来。看看**PHP的include规则**：
+如果checkFile返回TRUE，则这个file参数会被include进来，必然是通过这个include来把flag文件包括进来。
+
+### PHP的include规则
 
 - 使用绝对路径：直接包含进来；
 - 使用相对路径：
@@ -89,7 +91,7 @@
 
 若查找不到，从博客中看到说是：
 
-> tips:include函数有这么一个神奇的功能：以字符‘/’分隔（而且不计个数），若是在前面的字符串所代表的文件无法被PHP找到，则PHP会自动包含‘/’后面的文件——注意是最后一个‘/’。
+> tips:include函数有这么一个神奇的功能：以字符‘/’分隔（而且不计个数），若是在前面的字符串所代表的文件无法被PHP找到，则PHP会自动包含‘/’后面的文件——注意是最后一个‘/’。[^WarmUp1-blog]
 
 基于include的规则，可通过如下方式通过参数检查并访问到flag文件：
 
@@ -98,3 +100,41 @@ include "hint.php?../../../../../ffffllllaaaagggg"
 ```
 
 **问题：为什么必须是../../，如果只是为了构造一个不存在的或者超长的目录，换成其他字符应该也可以？签名tips的说明可能有误**
+
+## [ACTF2020 新生赛]Include 1
+
+![1692951098905.png](./images/include-1.png)
+
+本题页面和查看页面源代码均不能获得任何信息。点开tips，只有如下一句话：
+
+![1692951134016.png](./images/include1-tips.png)
+
+本来往如何注入命令或者访问服务器文件的方向考虑。想不出来，查了答案是：在URL中加入参数：`file=php://filter/read=convert.base64-encode/resource=flag.php`。通过这个参数可以获得flag.php的PHP源码的base64形式，解码后得到PHP代码，其中的注释里包含了flag。
+
+![1692954947358.png](./images/include1-flagcode.png)
+
+解码后得到如下代码：
+
+```php
+<?php
+echo "Can you find out the flag?";
+//flag{978b7494-4807-4215-b4e6-4a27d76c39e8}
+```
+
+由于PHP代码已经注释掉flag信息，并没有产生到HTML中，从页面和HTML的注释都无法获得。这个是无论如何自己也想不出来的，因为不熟悉PHP。
+
+### php伪协议
+
+形如`php://`定义了一些PHP的I/O流，允许访问 PHP 的输入输出流、标准输入输出和错误描述符，内存中、磁盘备份的临时文件流以及可以操作其他读取写入文件资源的过滤器[^php-manual]。包括有：
+
+- `php://stdin`、`php://stdout`、`php://stderr`：标准输入/输出/错误流的引用的**拷贝**，关闭不影响真正的系统I/O流，输入流为只读，输出流为只写；
+- `php://input`、`php://output`：
+
+
+
+
+
+
+
+[^WarmUp1-blog]: [buuctf-[HCTF 2018]WarmUp1(小宇特详解)_[hctf 2018]warmup 1_小宇特详解的博客-CSDN博客](https://blog.csdn.net/xhy18634297976/article/details/119494505)
+[^php-manual]: [PHP: php:// - Manual](https://www.php.net/manual/zh/wrappers.php.php)
