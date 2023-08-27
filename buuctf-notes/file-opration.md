@@ -127,11 +127,16 @@ echo "Can you find out the flag?";
 
 形如`php://`定义了一些PHP的I/O流，允许访问 PHP 的输入输出流、标准输入输出和错误描述符，内存中、磁盘备份的临时文件流以及可以操作其他读取写入文件资源的过滤器[^php-manual]。包括有：
 
-- `php://stdin`、`php://stdout`、`php://stderr`：标准输入/输出/错误流的引用的**拷贝**，关闭不影响真正的系统I/O流，输入流为只读，输出流为只写；
-- `php://input`、`php://output`：
+- `php://stdin`、`php://stdout`、`php://stderr`：可直接访问PHP进程的标准输入/输出/错误流，是I/O流的**拷贝**，关闭不影响真正的系统I/O流，输入流为只读，输出流为只写；
+- `php://input`、`php://output`：访问请求的原始数据的只读流和只写流；
+- `php://fd`：可直接访问指定的文件描述符；
+- `php://memory`、`php://temp`：类似文件包装器的数据流，前者写入内存，后者会在内存达到预设限制时写入临时文件；
+- `php://filter`：一个元封装器，用于数据流打开时应用的过滤操作，具有多个参数，详见Ref[^php-manual]
 
 
+本题中答案：`php://filter/read=convert.base64-encode/resource=flag.php`是选择了flag.php这个数据流（resource参数），指定使用base64编码作为应用到这个流的read过滤器，从而实现显示出base64编码过的php文件，解码后可获得所有代码内容包括注释。
 
+这个需要对php的过滤器熟悉才能想得到。
 
 
 
