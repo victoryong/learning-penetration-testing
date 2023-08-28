@@ -9,8 +9,8 @@ study notes of penetration testing via ctf and blogs
 
 ### SQL
 
-- [[极客大挑战 2019]EasySQL](buuctf-notes/sql-injection.md#[极客大挑战%202019]EasySQL)
-- [[极客大挑战 2019]Havefun 1](buuctf-notes/sql-injection.md#%5B%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98%202019%5DHavefun%201)
+- [极客大挑战 2019]EasySQL
+- [极客大挑战 2019]Havefun 1
 
 ### 代码执行
 
@@ -19,3 +19,4 @@ study notes of penetration testing via ctf and blogs
 ### 文件操作
 
 - [HCTF 2018]WarmUp 1
+- [ACTF2020 新生赛]Include 1
